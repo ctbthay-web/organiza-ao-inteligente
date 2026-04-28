@@ -1,0 +1,7 @@
+{
+  "name": "Relatório Inteligente (Smart Report Organizer)",
+  "description": "Uma ferramenta poderosa para extrair e organizar dados de arquivos PDF, Excel e Imagens usando IA. Transforme relatórios desorganizados em tabelas estruturadas instantaneamente.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
