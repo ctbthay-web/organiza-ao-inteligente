@@ -272,9 +272,11 @@ const App: React.FC = () => {
         {activeStep === 'start' && (
           <div className="animate-in fade-in duration-700 slide-in-from-bottom-4 px-4 text-center">
             <h2 className="text-6xl font-black text-slate-900 mb-8 tracking-tighter">
-              Organização <span className="text-[#4f46e5]">Inteligente</span> de Relatórios.
+              Relatórios <span className="text-[#4f46e5]">Inteligentes</span> & Auditoria.
             </h2>
-            <p className="text-slate-500 text-xl font-medium max-w-2xl mx-auto mb-16">Extraia, cruze ou ajuste seus arquivos com precisão absoluta usando Inteligência Artificial.</p>
+            <p className="text-slate-500 text-xl font-medium max-w-2xl mx-auto mb-16">
+              Extraia, cruze ou valide seus documentos com precisão absoluta usando Inteligência Artificial de última geração.
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {QUICK_ACTIONS.map(action => (
                 <div key={action.id} onClick={() => { setInstruction(action.instruction); setActiveStep('config'); }} className="group cursor-pointer bg-white border border-slate-200 rounded-[3rem] p-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all border-b-8 border-b-slate-100 hover:border-b-[#4f46e5]">
