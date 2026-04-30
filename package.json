@@ -9,11 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.2.3",
-    "xlsx": "^0.18.5",
     "@google/genai": "^1.36.0",
+    "@tailwindcss/vite": "^4.2.4",
+    "lucide-react": "^0.562.0",
+    "motion": "^12.38.0",
+    "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "lucide-react": "^0.562.0"
+    "tailwindcss": "^4.2.4",
+    "tailwindcss-animate": "^1.0.7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

@@ -29,6 +29,7 @@ import {
   Wand2
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import { motion, AnimatePresence } from 'motion/react';
 
 import { FileMetadata, ProcessingResult, FileType } from './types';
 import { fileToBase64, parseExcel, extractPdfTextInChunks, pdfToImages } from './utils/fileUtils';
@@ -253,51 +254,101 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-20 font-sans">
-      <header className="bg-white border-b border-slate-200 p-4 sticky top-0 z-40 shadow-sm">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 selection:bg-[#4f46e5]/10 selection:text-[#4f46e5] font-sans relative overflow-x-hidden">
+      {/* Technical Background Pattern */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
+           style={{ backgroundImage: `radial-gradient(#4f46e5 1px, transparent 0)`, backgroundSize: '40px 40px' }} />
+      
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 sticky top-0 z-40 shadow-sm">
         <div className="max-w-[100rem] mx-auto flex items-center justify-between px-4">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveStep('start')}>
-            <div className="p-2 bg-[#4f46e5] rounded-xl text-white shadow-lg"><Zap className="w-5 h-5 fill-current" /></div>
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3 cursor-pointer group" 
+            onClick={() => setActiveStep('start')}
+          >
+            <div className="p-2 bg-[#4f46e5] rounded-xl text-white shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all">
+              <Zap className="w-5 h-5 fill-current" />
+            </div>
             <h1 className="text-xl font-bold tracking-tight">SmartReport <span className="text-[#4f46e5]">Pro</span></h1>
-          </div>
+          </motion.div>
           {activeStep !== 'start' && (
-            <button onClick={() => setActiveStep('start')} className="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-900 bg-slate-100/50 rounded-xl transition-all">
+            <motion.button 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              onClick={() => setActiveStep('start')} 
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-900 bg-slate-100 rounded-xl transition-all border border-slate-200"
+            >
               <ArrowLeft className="w-4 h-4" /> Voltar
-            </button>
+            </motion.button>
           )}
         </div>
       </header>
 
-      <main className={`${activeStep === 'result' ? 'max-w-none px-0' : 'max-w-6xl px-4'} mx-auto mt-12 transition-all duration-300`}>
-        {activeStep === 'start' && (
-          <div className="animate-in fade-in duration-700 slide-in-from-bottom-4 px-4 text-center">
-            <h2 className="text-6xl font-black text-slate-900 mb-8 tracking-tighter">
-              Relatórios <span className="text-[#4f46e5]">Inteligentes</span> & Auditoria.
-            </h2>
-            <p className="text-slate-500 text-xl font-medium max-w-2xl mx-auto mb-16">
-              Extraia, cruze ou valide seus documentos com precisão absoluta usando Inteligência Artificial de última geração.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {QUICK_ACTIONS.map(action => (
-                <div key={action.id} onClick={() => { setInstruction(action.instruction); setActiveStep('config'); }} className="group cursor-pointer bg-white border border-slate-200 rounded-[3rem] p-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all border-b-8 border-b-slate-100 hover:border-b-[#4f46e5]">
-                  <div className={`w-16 h-16 ${action.color} rounded-[1.5rem] flex items-center justify-center mb-6`}>{action.icon}</div>
-                  <h3 className="text-xl font-black text-slate-900 mb-2">{action.title}</h3>
-                  <p className="text-slate-500 text-sm font-semibold mb-6">{action.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {activeStep === 'config' && (
-          <div className="max-w-4xl mx-auto bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100 animate-in fade-in">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-black text-slate-900 tracking-tight">Configurar Processamento</h2>
-              <div className="flex gap-2">
-                <span className="bg-indigo-100 text-indigo-700 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Passo 1: Arquivos</span>
-                <span className="bg-slate-100 text-slate-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Passo 2: Instrução</span>
+      <main className={`relative z-10 ${activeStep === 'result' ? 'max-w-none px-0' : 'max-w-7xl px-4'} mx-auto mt-12 transition-all duration-300 pb-20`}>
+        <AnimatePresence mode="wait">
+          {activeStep === 'start' && (
+            <motion.div 
+              key="start"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="px-4 text-center py-10"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-8">
+                <Wand2 className="w-3 h-3" /> Inteligência de Dados
               </div>
-            </div>
+              <h2 className="text-7xl md:text-8xl font-black text-slate-900 mb-8 tracking-tighter leading-tight">
+                Relatórios <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4f46e5] to-indigo-400">Inteligentes</span><br/>& Auditoria.
+              </h2>
+              <p className="text-slate-500 text-xl md:text-2xl font-medium max-w-3xl mx-auto mb-16 leading-relaxed">
+                Extraia, cruze ou valide seus documentos com precisão absoluta usando Inteligência Artificial de última geração.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {QUICK_ACTIONS.map((action, idx) => (
+                  <motion.div 
+                    key={action.id} 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    onClick={() => { setInstruction(action.instruction); setActiveStep('config'); }} 
+                    className="group cursor-pointer bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all border-b-[10px] border-b-slate-100 hover:border-b-indigo-500 text-left flex flex-col h-full"
+                  >
+                    <div className={`w-16 h-16 ${action.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500`}>
+                      {action.icon}
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3 tracking-tight">{action.title}</h3>
+                    <p className="text-slate-500 text-sm font-medium leading-relaxed mb-8 flex-grow">{action.description}</p>
+                    <div className="flex items-center gap-2 text-[#4f46e5] font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                      Começar <ChevronRight className="w-4 h-4" />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {activeStep === 'config' && (
+            <motion.div 
+              key="config"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              className="max-w-4xl mx-auto bg-white rounded-[3rem] shadow-2xl p-12 border border-slate-100"
+            >
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-10">
+                <h2 className="text-4xl font-black text-slate-900 tracking-tight">Processamento</h2>
+                <div className="flex gap-2">
+                  <div className="bg-indigo-50 text-indigo-700 text-[10px] font-black px-4 py-2 rounded-xl uppercase tracking-wider border border-indigo-100 flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                    Passo 1: Fonte
+                  </div>
+                  <div className="bg-slate-50 text-slate-400 text-[10px] font-black px-4 py-2 rounded-xl uppercase tracking-wider border border-slate-100">
+                    Passo 2: Objetivo
+                  </div>
+                </div>
+              </div>
             
             <div className="border-[4px] border-dashed border-slate-100 rounded-[3rem] p-16 flex flex-col items-center justify-center bg-slate-50/40 hover:bg-slate-50 transition-all group mb-12">
               <UploadCloud className="w-20 h-20 text-indigo-200 mb-8 group-hover:text-[#4f46e5] transition-colors" />
@@ -337,29 +388,66 @@ const App: React.FC = () => {
                 </button>
               </div>
             )}
-          </div>
+          </motion.div>
         )}
 
         {activeStep === 'processing' && (
-          <div className="max-w-2xl mx-auto py-24 text-center space-y-12 animate-in fade-in">
-            <div className="relative w-64 h-64 mx-auto">
-              <div className="absolute inset-0 border-[20px] border-slate-100 rounded-full"></div>
-              <div className="absolute inset-0 border-[20px] border-[#4f46e5] rounded-full border-t-transparent animate-spin"></div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <Loader2 className="w-16 h-16 text-[#4f46e5] animate-pulse" />
-                <span className="text-5xl font-black text-slate-900 mt-2 tracking-tighter">{Math.round(progress.percent)}%</span>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-2xl mx-auto bg-white rounded-[3rem] shadow-2xl p-16 text-center border border-slate-100 relative overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 w-full h-2 bg-slate-100">
+              <motion.div 
+                className="h-full bg-indigo-500 shadow-[0_0_15px_rgba(79,70,229,0.5)]"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress.percent}%` }}
+                transition={{ duration: 0.5 }}
+              />
+            </div>
+
+            <div className="relative inline-block mb-12">
+              <div className="absolute inset-0 bg-[#4f46e5] blur-3xl opacity-20 animate-pulse" />
+              <div className="relative bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
+                <Loader2 className="w-16 h-16 text-[#4f46e5] animate-spin" />
               </div>
             </div>
-            <div className="space-y-4">
-              <h3 className="text-4xl font-black text-slate-900 tracking-tight">Processando Dados</h3>
-              <p className="text-slate-500 text-xl font-medium">{progress.phase}</p>
-              {progress.subPhase && <p className="text-slate-400 text-sm font-bold animate-pulse">{progress.subPhase}</p>}
+            
+            <motion.h2 
+              key={progress.phase}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-4xl font-black text-slate-900 mb-4 tracking-tight"
+            >
+              {progress.phase}
+            </motion.h2>
+            <p className="text-slate-500 text-lg font-medium mb-10">{progress.subPhase}</p>
+            
+            <div className="flex justify-between items-end">
+              <div className="text-left">
+                <span className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Status do Processamento</span>
+                <span className="text-indigo-600 font-bold">{Math.round(progress.percent)}% Concluído</span>
+              </div>
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <motion.div 
+                    key={i}
+                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    transition={{ repeat: Infinity, duration: 1.5, delay: i * 0.2 }}
+                    className="w-1.5 h-1.5 rounded-full bg-indigo-500"
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {activeStep === 'result' && result && (
-          <div className="w-full animate-in fade-in duration-700">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full"
+          >
             {/* Toolbar Full Width */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 px-12 mb-12">
               <div className="space-y-2">
@@ -472,8 +560,9 @@ const App: React.FC = () => {
                 </div>
               </div>
             )}
-          </div>
+          </motion.div>
         )}
+        </AnimatePresence>
       </main>
 
       <style>{`
